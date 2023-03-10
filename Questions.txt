@@ -1,0 +1,2 @@
+1. Should I be using venv or conda, I understand that essentially python is running from that directory but at what point will that be critical? Probably awnsered later.
+2.

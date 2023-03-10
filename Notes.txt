@@ -1,0 +1,17 @@
+ C:/Users/Casey/AppData/Local/Microsoft/WindowsApps/python3.10.exe -m pytest -v .\
+
+ Architecture Patterns with Python Book..follow along with this and P&G book to work code to include tests. Then fork in flask into code. Bring over the test modules that you have attempted to create in
+ previous "Barky" repo and then work from this file set and move forward. 
+ https://www.youtube.com/watch?v=IA8I5Rf8_RY&t=1707s
+ https://www.youtube.com/watch?v=OOsOQPsueu0
+ https://www.youtube.com/watch?v=KcnBNTsOZ-I
+ https://www.youtube.com/watch?v=SZQmLwJxY_A
+
+
+
+Creation of Vitural Enviroment for folder, follow from App Code 1 video "python -m venv app_env", creates directory under structure.
+In order "Activate" you need to be in powershell terminal and then run activate script. "PS F:\School\WTAMU\CIDM6330\Barky> & F:\School\WTAMU\CIDM6330\Barky\app_env\Scripts\activate "
+
+git add -A
+git commit -m 'added in vew .txt files'
+git push -u origin master
