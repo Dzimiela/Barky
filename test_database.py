@@ -84,17 +84,36 @@ def test_database_manager_add_bookmark(database_manager):
 #arrange
 #act
 #assert
-def test_database_delete_table(self,table_name, criteria):
-    placeholders = [f'{column} = ?' for column in criteria.keys()]
-    delete_criteria = ' AND '.join(placeholders)
-    self._execute(
-         f'''
-         DELETE FROM {table_name}
-         WHERE {delete_criteria};
-         ''',
-         tuple(criteria.values()), #https://www.w3schools.com/python/python_tuples.asp
-     )
-    assert delete_criteria == ' AND '.join(placeholders)
+def test_database_manager_delete_bookmark(database_manager):
+
+    # arrange
+    database_manager.create_table(
+        "bookmarks_delete",
+        {
+            "id": "integer primary key autoincrement",
+            "title": "text not null",
+            "url": "text not null",
+            "notes": "text",
+            "date_added": "text not null",
+        },
+    )
+
+    data = {
+        "title": "delete_title",
+        "url": "http://delete.com",
+        "notes": "delete notes",
+        "date_added": datetime.utcnow().isoformat()        
+    }
+
+    # act
+    database_manager.add("bookmarks_delete", data)
+
+    # assert
+    conn = database_manager.connection
+    cursor = conn.cursor()
+    cursor.execute(''' DELETE notes FROM bookmarks_delete WHERE title='delete_title' ''')    
+    assert cursor.fetchone()[1] == 0 
+
 
 def test_database_select(database_manager, self, table_name, criteria=None, order_by=None):
     database_manager.select()
