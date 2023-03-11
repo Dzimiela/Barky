@@ -115,24 +115,35 @@ def test_database_manager_delete_bookmark(database_manager):
     assert cursor.fetchone()[1] == 0 
 
 
-def test_database_select(database_manager, self, table_name, criteria=None, order_by=None):
-    database_manager.select()
-    criteria = criteria or {}
-    
-    query = f'SELECT * FROM {table_name}'
-    if criteria:
-        placeholders = [f'{column} = ?' for column in criteria.keys()]
-        select_criteria = ' AND '.join(placeholders)
-        query += f' WHERE {select_criteria}'
+def test_database_manager_select_table(database_manager):
 
-    if order_by:
-        query += f' ORDER BY {order_by}'
-
-    return self._execute(
-        query,
-        tuple(criteria.values()),
+    # arrange
+    database_manager.create_table(
+        "bookmarks_selecttable",
+        {
+            "id": "integer primary key autoincrement",
+            "title": "text not null",
+            "url": "text not null",
+            "notes": "text",
+            "date_added": "text not null",
+        },
     )
-    assert criteria == criteria or {}
+
+    data = {
+        "title": "selecttable_title",
+        "url": "http://selecttable.com",
+        "notes": "select table",
+        "date_added": datetime.utcnow().isoformat()        
+    }
+
+    # act
+    database_manager.add("bookmarks_selecttable", data)
+
+    # assert
+    conn = database_manager.connection
+    cursor = conn.cursor()
+    cursor.execute(''' SELCT * FROM bookmarks_select table WHERE title='selecttable_title' ''')    
+    assert cursor.fetchone()[1] == 1
 
 
 def test_database_execute(self, statement, values=None):
@@ -160,9 +171,11 @@ def test_database_add(self, table_name, data):
 
     assert column_values == tuple(data.values())
 
-def test_database_drop_table(database_manager, self, table_name):
+def test_database_manager_drop_table(database_manager):
+
+    # arrange
     database_manager.create_table(
-        "bookmarks",
+        "bookmarks_droptable",
         {
             "id": "integer primary key autoincrement",
             "title": "text not null",
@@ -172,14 +185,18 @@ def test_database_drop_table(database_manager, self, table_name):
         },
     )
 
-    #assert
+    data = {
+        "title": "droptable_title",
+        "url": "http://droptable.com",
+        "notes": "drop table",
+        "date_added": datetime.utcnow().isoformat()        
+    }
+
+    # act
+    database_manager.add("bookmarks_droptable", data)
+
+    # assert
     conn = database_manager.connection
     cursor = conn.cursor()
-
-    #cursor.execute(''' SELECT count(name) FROM sqlite_master WHERE type='table' AND name='bookmarks' ''')
-
-    cursor.execute( f''' DROP TABLE {table_name};''')
-
-    database_manager.drop_table("bookmarks")
-
-    assert cursor.fetchone()[0] == 1
+    cursor.execute(''' DROP TABLE FROM bookmarks_droptable WHERE title='droptable_title' ''')    
+    assert cursor.fetchone()[1] == 0
