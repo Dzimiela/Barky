@@ -80,15 +80,15 @@ def test_database_manager_add_bookmark(database_manager):
     cursor.execute(''' SELECT * FROM bookmarks WHERE title='test_title' ''')    
     assert cursor.fetchone()[0] == 1    
 
-#Created by My
+#Create-Read-Update-Delete
 #arrange
 #act
 #assert
-def test_database_manager_delete_bookmark(database_manager):
+def test_database_manager_drop_table(database_manager):
 
     # arrange
     database_manager.create_table(
-        "bookmarks_delete",
+        "bookmarks",
         {
             "id": "integer primary key autoincrement",
             "title": "text not null",
@@ -106,20 +106,20 @@ def test_database_manager_delete_bookmark(database_manager):
     }
 
     # act
-    database_manager.add("bookmarks_delete", data)
+    database_manager.add("bookmarks", data)
 
     # assert
     conn = database_manager.connection
     cursor = conn.cursor()
-    cursor.execute(''' DELETE notes FROM bookmarks_delete WHERE title='delete_title' ''')    
-    assert cursor.fetchone()[1] == 0 
+    cursor.execute(''' DROP TABLE bookmarks ''')    
+    assert cursor.fetchone() is None 
 
 
 def test_database_manager_select_table(database_manager):
 
     # arrange
     database_manager.create_table(
-        "bookmarks_selecttable",
+        "bookmarks",
         {
             "id": "integer primary key autoincrement",
             "title": "text not null",
@@ -137,45 +137,20 @@ def test_database_manager_select_table(database_manager):
     }
 
     # act
-    database_manager.add("bookmarks_selecttable", data)
+    database_manager.add("bookmarks", data)
 
     # assert
     conn = database_manager.connection
     cursor = conn.cursor()
-    cursor.execute(''' SELCT * FROM bookmarks_select table WHERE title='selecttable_title' ''')    
-    assert cursor.fetchone()[1] == 1
+    cursor.execute(''' SELECT * FROM bookmarks WHERE id IS NOT NULL ''')    
+    assert cursor.fetchone()[0] == 1
 
 
-def test_database_execute(self, statement, values=None):
-    with self.connection: #https://www.pythonforbeginners.com/files/with-statement-in-python
-        cursor = self.connection.cursor()
-        cursor.execute(statement, values or [])
-        return cursor
-    assert cursor == self.connection.cursor()
-
-
-def test_database_add(self, table_name, data):
-    placeholders = ', '.join('?' * len(data))
-    column_names = ', '.join(data.keys())
-    column_values = tuple(data.values())
-    
-
-    self._execute(
-            f'''
-            INSERT INTO {table_name}
-            ({column_names})
-            VALUES ({placeholders});
-            ''',
-            column_values,
-    )
-
-    assert column_values == tuple(data.values())
-
-def test_database_manager_drop_table(database_manager):
+def test_database_manager_delete_bookmark(database_manager):
 
     # arrange
     database_manager.create_table(
-        "bookmarks_droptable",
+        "bookmarks",
         {
             "id": "integer primary key autoincrement",
             "title": "text not null",
@@ -193,7 +168,7 @@ def test_database_manager_drop_table(database_manager):
     }
 
     # act
-    database_manager.add("bookmarks_droptable", data)
+    database_manager.add("bookmarks", data)
 
     # assert
     conn = database_manager.connection
