@@ -8,5 +8,7 @@
 def test_quit_command():
     pass
 
+#
+
 # okay, should I test the other commands?
 # not really, they are tighly coupled with sqlite3 and its use in the database.py module

@@ -1,3 +1,5 @@
+ https://www.cosmicpython.com/book/chapter_01_domain_model.html
+ 
  C:/Users/Casey/AppData/Local/Microsoft/WindowsApps/python3.10.exe -m pytest -v .\
 
  Architecture Patterns with Python Book..follow along with this and P&G book to work code to include tests. Then fork in flask into code. Bring over the test modules that you have attempted to create in
